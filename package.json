@@ -1,0 +1,36 @@
+{
+  "name": "caffe_delivery",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev  --exit-child  transpile-only --ignore-watch node_modules src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pedrodk81/Caffe_Delivery.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pedrodk81/Caffe_Delivery/issues"
+  },
+  "homepage": "https://github.com/Pedrodk81/Caffe_Delivery#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.9",
+    "prisma": "^4.3.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.8.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.3.1",
+    "bcrypt": "^5.0.1",
+    "express": "^4.18.1",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "tsc": "^2.0.4"
+  }
+}
