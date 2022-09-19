@@ -3,5 +3,6 @@ declare namespace Express {
   export interface Request {
     /* Adicionando uma elemento a interface de Request  */
     id: string;
+    shoppingCartId: string;
   }
 }
