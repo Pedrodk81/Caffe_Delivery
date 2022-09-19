@@ -12,25 +12,73 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(uuid())
-  username     String         @unique
-  password     String
-  shoppingCart ShoppingCart[]
+  id         String @id @default(uuid())
+  email      String @unique
+  password   String
+  first_name String
+  last_name  String
+  order_id   String
+
+  order        Order          @relation(fields: [order_id], references: [id])
+  User_adrress User_adrress[]
 }
 
-model Caffe {
+model User_adrress {
+  userId    String  @id @default(uuid())
+  user_id   User    @relation(fields: [userId], references: [id])
+  zip_code  String
+  address   String
+  number    String
+  reference String?
+  city      String
+  stete     String
+  street    String
+}
+
+model Coffe {
   id           String         @id @default(uuid())
   name         String         @unique
   description  String?
   price        Float
-  categori     String[]
-  ShoppingCart ShoppingCart[]
+  Order_coffee Order_coffee[]
 }
 
-model ShoppingCart {
-  id             String @id @default(uuid())
-  caffeId        String
-  caffe          Caffe  @relation(fields: [caffeId], references: [id])
-  User           User   @relation(fields: [shoppingCartId], references: [id])
-  shoppingCartId String
+model Coffer_category {
+  coffe_id    String   @id @default(uuid())
+  category_id Category @relation(references: [id], fields: [categoryId])
+  categoryId  String
+}
+
+model Category {
+  id              String            @id @default(uuid())
+  name            String
+  coffer_category Coffer_category[]
+}
+
+model Order {
+  id              String    @id @default(uuid())
+  user_id         String
+  total           Float?
+  payment_at      DateTime?
+  payment_type_id String
+  order_coffee_id String
+
+  order_coffee Order_coffee @relation(fields: [order_coffee_id], references: [order_id])
+  payment      Payment_type @relation(fields: [payment_type_id], references: [id])
+  User         User[]
+}
+
+model Payment_type {
+  id    String  @id @default(uuid())
+  name  String
+  Order Order[]
+}
+
+model Order_coffee {
+  order_id String @id @default(uuid())
+  quantity Int
+  coffe_id String
+
+  coffee Coffe   @relation(fields: [coffe_id], references: [id])
+  Order  Order[]
 }
