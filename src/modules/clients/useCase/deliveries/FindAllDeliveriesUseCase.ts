@@ -1,18 +1,21 @@
 import { prisma } from "../../../../database/prismaClient";
 
+interface IFindALlDEliveries {
+  user_id: string;
+  order_coffee: string;
+}
+
 export class FindAllDeliveriesUseCase {
-  async execute(shoppingCartId: string) {
-    const shoppingCard = await prisma.shoppingCart.findMany({
+  async execute(user_id: string) {
+    const order = await prisma.order.findMany({
       where: {
-        id: shoppingCartId,
+        user_id: user_id,
       },
       select: {
-        caffe: true,
-        caffeId: true,
-        User: true,
+        order_coffee_id: true,
       },
     });
 
-    return shoppingCard;
+    return order;
   }
 }
