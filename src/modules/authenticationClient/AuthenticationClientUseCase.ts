@@ -3,15 +3,15 @@ import { sign } from "jsonwebtoken";
 import { prisma } from "../../database/prismaClient";
 
 interface IAuthenticateClient {
-  username: string;
+  email: string;
   password: string;
 }
 
 export class AuthenticationClientUseCase {
-  async execute({ username, password }: IAuthenticateClient) {
+  async execute({ email, password }: IAuthenticateClient) {
     const client = await prisma.user.findFirst({
       where: {
-        username,
+        email,
       },
     });
     if (!client) {
@@ -25,12 +25,12 @@ export class AuthenticationClientUseCase {
     }
     //gerar token
     const token = sign(
-      { username },
+      { email },
       /*chave secreta (utilizei um md5 generator, 
         mas é tenho que perguntar para o aaron depois)*/
       "84dde50a5070e689f198651a3e27805f",
       {
-        subject: client.id,
+        subject: client.email,
         expiresIn: "1d",
       }
     );

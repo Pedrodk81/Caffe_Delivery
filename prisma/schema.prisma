@@ -12,73 +12,99 @@ datasource db {
 }
 
 model User {
-  id         String @id @default(uuid())
-  email      String @unique
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
   password   String
   first_name String
   last_name  String
-  order_id   String
+  created_at DateTime  @default(now())
+  updated_at DateTime?
 
-  order        Order          @relation(fields: [order_id], references: [id])
   User_adrress User_adrress[]
+
+  Order Order[]
 }
 
 model User_adrress {
-  userId    String  @id @default(uuid())
-  user_id   User    @relation(fields: [userId], references: [id])
-  zip_code  String
-  address   String
-  number    String
-  reference String?
-  city      String
-  stete     String
-  street    String
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  zip_code   String
+  address    String
+  number     String
+  reference  String?
+  city       String
+  stete      String
+  street     String
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+
+  user User @relation(fields: [user_id], references: [id])
 }
 
-model Coffe {
-  id           String         @id @default(uuid())
-  name         String         @unique
-  description  String?
-  price        Float
-  Order_coffee Order_coffee[]
+model Coffee {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  price       Float
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+
+  Coffee_category Coffee_category[]
+  Order_coffee    Order_coffee[]
 }
 
-model Coffer_category {
-  coffe_id    String   @id @default(uuid())
-  category_id Category @relation(references: [id], fields: [categoryId])
-  categoryId  String
+model Coffee_category {
+  id          Int       @id @default(autoincrement())
+  coffee_id   Int
+  category_id Int
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+
+  category Category @relation(references: [id], fields: [category_id])
+  Coffee   Coffee?  @relation(fields: [coffee_id], references: [id])
 }
 
 model Category {
-  id              String            @id @default(uuid())
-  name            String
-  coffer_category Coffer_category[]
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+
+  coffee_category Coffee_category[]
 }
 
 model Order {
-  id              String    @id @default(uuid())
-  user_id         String
+  id              Int       @id @default(autoincrement())
+  user_id         Int
   total           Float?
   payment_at      DateTime?
-  payment_type_id String
-  order_coffee_id String
+  payment_type_id Int?
+  order_coffee_id Int
+  created_at      DateTime  @default(now())
+  updated_at      DateTime?
 
-  order_coffee Order_coffee @relation(fields: [order_coffee_id], references: [order_id])
-  payment      Payment_type @relation(fields: [payment_type_id], references: [id])
-  User         User[]
+  order_coffee Order_coffee  @relation(fields: [order_coffee_id], references: [id])
+  payment      Payment_type? @relation(fields: [payment_type_id], references: [id])
+  User         User          @relation(fields: [user_id], references: [id])
 }
 
 model Payment_type {
-  id    String  @id @default(uuid())
-  name  String
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+
   Order Order[]
 }
 
 model Order_coffee {
-  order_id String @id @default(uuid())
-  quantity Int
-  coffe_id String
+  id         Int       @id @default(autoincrement())
+  order_id   Int
+  quantity   Int       @default(1)
+  coffee_id  Int
+  created_at DateTime  @default(now())
+  updated_at DateTime?
 
-  coffee Coffe   @relation(fields: [coffe_id], references: [id])
+  coffee Coffee  @relation(fields: [coffee_id], references: [id])
   Order  Order[]
 }

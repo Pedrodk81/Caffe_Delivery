@@ -1,15 +1,20 @@
-import { prisma } from "../../../../database/prismaClient";
 import { hash } from "bcrypt";
+import { Request, Response } from "express";
+import { prisma } from "../database/prismaClient";
 
-interface ICreateClient {
+interface ICreateUser {
   email: string;
   password: string;
   first_name: string;
-  last_name: string;
+  last_name;
 }
 
-export class CreateClientUseCase {
-  async execute({ email, password, first_name, last_name }: ICreateClient) {
+export class UserController {
+  public static async createUser(
+    { email, password, first_name, last_name }: ICreateUser,
+    res: Response,
+    _req: Request
+  ) {
     const userExist = await prisma.user.findFirst({
       where: {
         email: {
@@ -19,7 +24,7 @@ export class CreateClientUseCase {
       },
     });
     if (userExist) {
-      throw new Error("Client already exist");
+      throw new Error("Email already exist ");
     }
 
     const hashPassword = await hash(password, 10);
@@ -32,6 +37,7 @@ export class CreateClientUseCase {
         last_name,
       },
     });
-    return client;
+
+    res.status(200).send(client);
   }
 }

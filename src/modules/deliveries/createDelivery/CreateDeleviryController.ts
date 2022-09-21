@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { CreateDeliveryUseCase } from "./CreateDeliveryUseCase";
+import { CreateOrderUseCase } from "./CreateOrderUserCarse";
 
 export class CreateDeliveryController {
   async execute(response: Response, request: Request) {
-    const { caffeId } = request.body;
-    const { shoppingCartId } = request;
+    const { order_coffee_id } = request.body;
+    const { user_id } = request;
 
-    const createDeliveryUseCase = new CreateDeliveryUseCase();
+    const createOrderUseCase = new CreateOrderUseCase();
 
-    const delivery = await createDeliveryUseCase.execute({
-      shoppingCartId,
-      caffeId,
+    const delivery = await createOrderUseCase.execute({
+      order_coffee_id,
+      user_id,
     });
     return response.json(delivery);
   }
