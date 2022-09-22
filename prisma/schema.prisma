@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
+  provider = "postgresql"
+  url               = env("SHADOW_DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
@@ -79,13 +79,12 @@ model Order {
   total           Float?
   payment_at      DateTime?
   payment_type_id Int?
-  order_coffee_id Int
   created_at      DateTime  @default(now())
   updated_at      DateTime?
 
-  order_coffee Order_coffee  @relation(fields: [order_coffee_id], references: [id])
-  payment      Payment_type? @relation(fields: [payment_type_id], references: [id])
-  User         User          @relation(fields: [user_id], references: [id])
+  payment      Payment_type?  @relation(fields: [payment_type_id], references: [id])
+  User         User           @relation(fields: [user_id], references: [id])
+  Order_coffee Order_coffee[]
 }
 
 model Payment_type {
@@ -100,11 +99,11 @@ model Payment_type {
 model Order_coffee {
   id         Int       @id @default(autoincrement())
   order_id   Int
-  quantity   Int       @default(1)
   coffee_id  Int
+  quantity   Int       @default(1)
   created_at DateTime  @default(now())
   updated_at DateTime?
 
-  coffee Coffee  @relation(fields: [coffee_id], references: [id])
-  Order  Order[]
+  coffee Coffee @relation(fields: [coffee_id], references: [id])
+  order  Order?  @relation(fields: [order_id], references: [id])
 }

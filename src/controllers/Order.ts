@@ -1,49 +1,52 @@
 import { Express, Response, Request } from "express";
 import { prisma } from "../database/prismaClient";
-
+import { PrismaClient, Prisma } from '@prisma/client'
 interface ICreateOrder {
   user_id: number;
   coffee_id: number;
   total: number;
 }
 
-export class CoffeesController {
-  public static async listCoffees(_req: Request, res: Response) {
-    const coffees = await prisma.coffee.findMany({
-      include: { Coffee_category: { include: { category: true } } },
-    });
-    res.status(200).send(coffees);
-  }
-
+export default class OrderController {
   public static async createOrder(
-    { user_id, coffee_id, total }: ICreateOrder,
-    res: Response,
-    _req: Request
+    req: Request,
+    res: Response
   ) {
-    const order = await prisma.order.create({
-      data: {
-        user_id,
-        coffee_id,
-        total,
-      },
-    });
+    const { id } = req.user;
+    const { coffee_id, incremenet } = req.params;
+
+    let order: Prisma.OrderCreateInput
+    // order = await prisma.order.findFirst({ 
+    //     where: {
+    //       user_id: id,
+    //       payment_at: null
+    //     } 
+    //   });
+
+    let user = await prisma.user.findFirst({
+      where: {
+        id
+      }
+    })
+    
+    if(!order) {
+      order = await prisma.order.create({ 
+        data: {
+          user_id: 1,
+          Order_coffee: {
+            coffee_id,
+          }
+        } 
+      });
+    }
+
+    // const order = await prisma.order.create({
+    //   data: {
+    //     user_id,
+    //     total,
+    //   },
+    // });
+
     res.status(200).send(order);
   }
-
-  private async getMyOrder(user_id) {}
-    const order = await prisma.order.create({
-      data: {
-        user_id,
-        coffe_id,
-        total,
-      },
-    });
-    res.status(200).send(order);
-  // public static async IncreaseTheAmountOfCoffees(res: Response, req: Request) {
-  //   const addOrder = await prisma.order_coffee.findFirst({
-  //     where: {
-  //       order_coffee_id: {},
-  //     },
-  //   });
-  // }
 }

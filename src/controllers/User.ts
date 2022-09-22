@@ -6,16 +6,17 @@ interface ICreateUser {
   email: string;
   password: string;
   first_name: string;
-  last_name;
+  last_name: string;
 }
 
-export class UserController {
+export default class UserController {
   public static async createUser(
-    { email, password, first_name, last_name }: ICreateUser,
-    res: Response,
-    _req: Request
-  ) {
-    const userExist = await prisma.user.findFirst({
+    req: Request,
+    res: Response
+    ) {
+    const {first_name, last_name, email, password}: ICreateUser = req.body;
+
+    const hasUser = await prisma.user.findFirst({
       where: {
         email: {
           equals: email,
@@ -23,13 +24,14 @@ export class UserController {
         },
       },
     });
-    if (userExist) {
+
+    if (hasUser) {
       throw new Error("Email already exist ");
     }
 
     const hashPassword = await hash(password, 10);
 
-    const client = await prisma.user.create({
+    const userCreated = await prisma.user.create({
       data: {
         email,
         password: hashPassword,
@@ -38,6 +40,6 @@ export class UserController {
       },
     });
 
-    res.status(200).send(client);
+    res.status(200).send(userCreated);
   }
 }
