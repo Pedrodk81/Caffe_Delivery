@@ -17,7 +17,6 @@
     "url": "https://github.com/Pedrodk81/Caffe_Delivery/issues"
   },
   "homepage": "https://github.com/Pedrodk81/Caffe_Delivery#readme",
-  "description": "",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
@@ -34,5 +33,6 @@
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^8.5.1",
     "tsc": "^2.0.4"
-  }
+  },
+  "description": ""
 }
