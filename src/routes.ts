@@ -1,6 +1,5 @@
 import { Router } from "express";
 import validateToken from "./middlewares/validateToken";
-
 import OrderController from "./controllers/Order";
 import { CoffeesController } from "./controllers/Coffee";
 import UserController from "./controllers/User";
@@ -14,6 +13,10 @@ routes.post("/api/user", UserController.createUser);
 
 routes.get("/api/coffees", CoffeesController.listCoffees);
 
-routes.post("/api/order/:coffee_id/:increment", validateToken, OrderController.createOrder);
+routes.post(
+  "/api/order/:coffee_id/:increment",
+  validateToken,
+  OrderController.createOrder
+);
 
 export { routes };
