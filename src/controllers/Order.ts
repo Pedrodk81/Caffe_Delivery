@@ -1,4 +1,4 @@
-import { Express, Response, Request } from "express";
+import { Response, Request } from "express";
 import { prisma } from "../database/prismaClient";
 import { PrismaClient, Prisma } from "@prisma/client";
 
@@ -10,13 +10,13 @@ interface ICreateOrder {
 
 export default class OrderController {
   public static async createOrder(req: Request, res: Response) {
-    const { id } = req.user;
+    const { id } = req.params;
     const { order_coffee_id, incremenet, user_id } = req.params;
 
     let user = await prisma.order.findFirst({
       where: {
         user_id: {
-          equals: id,
+          equals: Number(id),
         },
       },
     });
